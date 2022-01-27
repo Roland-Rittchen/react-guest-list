@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { useState } from 'react';
+import AddGuest from './AddGuest.js';
 import GuestList from './GuestList.js';
 
 const header = css`
@@ -72,17 +73,7 @@ function App() {
           setGuestsList={setGuestsList}
         />
         <div css={inputSection}>
-          <div>
-            <label>
-              First name
-              <input />
-            </label>
-            <label>
-              Last name
-              <input />
-            </label>
-            <button>Add guest</button>
-          </div>
+          <AddGuest guestsList={guestsList} setGuestsList={setGuestsList} />
         </div>
       </div>
     </div>
