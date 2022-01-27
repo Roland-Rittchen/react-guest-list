@@ -10,7 +10,7 @@ function AddGuest(props) {
     tempList.push({
       firstName: firstName,
       lastName: lastName,
-      attending: true,
+      attending: false,
       id: props.guestsList.length,
     });
     props.setGuestsList(tempList);
@@ -25,6 +25,7 @@ function AddGuest(props) {
         <input
           value={firstName}
           onChange={(e) => setFirstName(e.currentTarget.value)}
+          disabled={props.isLoading ? 'disabled' : ''}
         />
       </label>
       <label>
@@ -32,9 +33,12 @@ function AddGuest(props) {
         <input
           value={lastName}
           onChange={(e) => setLastName(e.currentTarget.value)}
+          disabled={props.isLoading ? 'disabled' : ''}
         />
       </label>
-      <button onClick={addGuest}>Add guest</button>
+      <button onClick={addGuest} disabled={props.isLoading ? 'disabled' : ''}>
+        Add guest
+      </button>
     </div>
   );
 }

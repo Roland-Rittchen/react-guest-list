@@ -15,11 +15,12 @@ function GuestList(props) {
   useEffect(() => {
     async function fullFetch() {
       await fetchGuestList();
+      props.setIsLoading(true);
     }
     fullFetch().catch((err) => {
       console.log(err);
     });
-  }, []);
+  }, [props]);
 
   // console.log(props.guestsList);
 
@@ -59,4 +60,5 @@ GuestList.propTypes = {
     }),
   ),
   setGuestsList: PropTypes.func,
+  setIsLoading: PropTypes.func,
 };

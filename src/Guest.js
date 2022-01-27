@@ -23,13 +23,26 @@ const listOfGuestsSingleGuestName = css`
 
 function Guest(props) {
   const [attend, setAttend] = useState(props.attending);
-
+  const [checkBoxAria, setCheckBoxAria] = useState(
+    props.firstName.toLowerCase() +
+      ' ' +
+      props.lastName.toLowerCase() +
+      ' ' +
+      attend,
+  ); // <first name> <last name> attending status
   function changeAttending() {
     const tempGuestList = [...props.guestsList];
     tempGuestList[props.id].attending = !attend;
     props.setGuestsList(tempGuestList);
     setAttend(!attend);
-    console.log(props.guestsList);
+    setCheckBoxAria(
+      props.firstName.toLowerCase() +
+        ' ' +
+        props.lastName.toLowerCase() +
+        ' ' +
+        attend,
+    );
+    // console.log(props.guestsList);
   }
 
   function deleteGuest() {
@@ -39,7 +52,7 @@ function Guest(props) {
       object.id = index;
     });
     props.setGuestsList(tempGuestList);
-    console.log(props.guestsList);
+    // console.log(props.guestsList);
   }
   // console.log(props);
   return (
@@ -51,7 +64,12 @@ function Guest(props) {
         </div>
         <label>
           attending
-          <input type="checkbox" checked={attend} onChange={changeAttending} />
+          <input
+            aria-label={checkBoxAria}
+            type="checkbox"
+            checked={attend}
+            onChange={changeAttending}
+          />
         </label>
         <button onClick={deleteGuest}>Remove</button>
       </div>

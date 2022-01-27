@@ -34,6 +34,7 @@ const inputSection = css`
 `;
 
 function App() {
+  const [isLoading, setIsloading] = useState(true);
   const [guestsList, setGuestsList] = useState([
     {
       firstName: 'Aaron',
@@ -71,9 +72,14 @@ function App() {
           css={listOfGuests}
           guestsList={guestsList}
           setGuestsList={setGuestsList}
+          setIsLoading={setIsloading}
         />
         <div css={inputSection}>
-          <AddGuest guestsList={guestsList} setGuestsList={setGuestsList} />
+          <AddGuest
+            guestsList={guestsList}
+            setGuestsList={setGuestsList}
+            isLoading={isLoading}
+          />
         </div>
       </div>
     </div>
