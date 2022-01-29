@@ -51,6 +51,18 @@ function AddGuest({
     setIsLoading,
   ]);
 
+  const handleKeyDownFirstName = (event) => {
+    if (event.key === 'Enter') {
+      const nextSibling = document.querySelector(`input[name=lastNameInput]`);
+      nextSibling.focus();
+    }
+  };
+  const handleKeyDownLastName = (event) => {
+    if (event.key === 'Enter') {
+      setCreate(true);
+    }
+  };
+
   return (
     <div>
       <label>
@@ -58,23 +70,27 @@ function AddGuest({
         <input
           value={firstName}
           onChange={(e) => setFirstName(e.currentTarget.value)}
+          onKeyDown={handleKeyDownFirstName}
           disabled={isLoading ? 'disabled' : ''}
         />
       </label>
       <label>
         Last name
         <input
+          name="lastNameInput"
           value={lastName}
           onChange={(e) => setLastName(e.currentTarget.value)}
+          onKeyDown={handleKeyDownLastName}
           disabled={isLoading ? 'disabled' : ''}
         />
       </label>
+      {/*
       <button
         onClick={() => setCreate(true)}
         disabled={isLoading ? 'disabled' : ''}
       >
         Add guest
-      </button>
+      </button> */}
     </div>
   );
 }
