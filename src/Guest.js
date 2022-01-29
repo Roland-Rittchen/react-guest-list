@@ -83,7 +83,7 @@ function Guest({ id, firstName, lastName, attending, baseUrl, setIsLoading }) {
       setDel(false);
       setTimeout(() => {
         setIsLoading(true);
-      }, 250);
+      }, 75);
     }
   }, [deleteGuest, del, setDel, id, setIsLoading]);
 

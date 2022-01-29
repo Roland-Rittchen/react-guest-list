@@ -40,7 +40,7 @@ function AddGuest({
       setLastName('');
       setTimeout(() => {
         setIsLoading(true);
-      }, 250);
+      }, 75);
     }
   }, [
     createGuest,
