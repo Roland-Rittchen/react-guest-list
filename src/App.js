@@ -5,7 +5,7 @@ import AddGuest from './AddGuest.js';
 import GuestList from './GuestList.js';
 
 // const baseUrl = 'http://localhost:4000'; // local deploy
-const baseUrl = 'http://rrittc-react-guest-list.herokuapp.com';
+const baseUrl = 'https://rrittc-react-guest-list.herokuapp.com';
 
 const header = css`
   background-color: rgba(40, 41, 54, 1);
