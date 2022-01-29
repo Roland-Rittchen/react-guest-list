@@ -23,13 +23,16 @@ function GuestList({
       const response = await fetch(`${baseUrl}/guests`);
       const allGuests = await response.json();
       setGuestsList(allGuests);
-      setIsLoading(false);
     }
-  }, [baseUrl, setGuestsList, setIsLoading, isLoading]);
+  }, [baseUrl, setGuestsList, isLoading]);
 
   useEffect(() => {
-    fetchGuests().catch((err) => console.log(err));
-  }, [fetchGuests]);
+    if (isLoading) {
+      fetchGuests()
+        .then(() => setIsLoading(false))
+        .catch((err) => console.log(err));
+    }
+  }, [fetchGuests, setIsLoading, isLoading]);
 
   /*
   // Updating a guest (aka PUT /guests/:id)
