@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const listOfGuestsSingleGuest = css`
   display: flex;
@@ -21,57 +21,101 @@ const listOfGuestsSingleGuestName = css`
   font-weight: 700;
 `;
 
-function Guest(props) {
-  const [attend, setAttend] = useState(props.attending);
+function Guest({ id, firstName, lastName, attending, baseUrl, setIsLoading }) {
+  const [del, setDel] = useState(false);
+  const [change, setChange] = useState(false);
   const [checkBoxAria, setCheckBoxAria] = useState(
-    props.firstName.toLowerCase() +
-      ' ' +
-      props.lastName.toLowerCase() +
-      ' ' +
-      attend,
+    firstName.toLowerCase() + ' ' + lastName.toLowerCase() + ' ' + attending,
   ); // <first name> <last name> attending status
-  function changeAttending() {
-    const tempGuestList = [...props.guestsList];
-    tempGuestList[props.id].attending = !attend;
-    props.setGuestsList(tempGuestList);
-    setAttend(!attend);
-    setCheckBoxAria(
-      props.firstName.toLowerCase() +
-        ' ' +
-        props.lastName.toLowerCase() +
-        ' ' +
-        attend,
-    );
-    // console.log(props.guestsList);
-  }
 
-  function deleteGuest() {
-    const tempGuestList = [...props.guestsList];
-    tempGuestList.splice(props.id, 1);
-    tempGuestList.forEach((object, index) => {
-      object.id = index;
+  const changeAttending = useCallback(async () => {
+    if (change) {
+      await fetch(`${baseUrl}/guests/` + id, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ attending: true }),
+      });
+      // const updatedGuest = await response.json();
+    }
+    // const updatedGuest = await response.json();
+  }, [baseUrl, change, id]);
+
+  useEffect(() => {
+    if (change) {
+      console.log('use effect');
+      changeAttending().catch((err) => console.log(err));
+      setChange(false);
+      setIsLoading(true);
+      setCheckBoxAria(
+        firstName.toLowerCase() +
+          ' ' +
+          lastName.toLowerCase() +
+          ' ' +
+          attending,
+      );
+    }
+  }, [
+    changeAttending,
+    attending,
+    setCheckBoxAria,
+    change,
+    setChange,
+    id,
+    setIsLoading,
+    firstName,
+    lastName,
+  ]);
+
+  // function changeAttending() {
+  //   const tempGuestList = [...guestsList];
+  //   tempGuestList[id].attending = !attend;
+  //   setGuestsList(tempGuestList);
+  //   setAttend(!attend);
+  //   setCheckBoxAria(
+  //     firstName.toLowerCase() + ' ' + lastName.toLowerCase() + ' ' + attend,
+  //   );
+  //   // console.log(props.guestsList);
+  // }
+
+  // Deleting a guest (aka DELETE /guests/:id)
+  const deleteGuest = useCallback(async () => {
+    if (!del) {
+      return;
+    }
+    console.log('use callback');
+    await fetch(`${baseUrl}/guests/` + id, {
+      method: 'DELETE',
     });
-    props.setGuestsList(tempGuestList);
-    // console.log(props.guestsList);
-  }
-  // console.log(props);
+  }, [baseUrl, id, del]);
+
+  useEffect(() => {
+    if (del) {
+      console.log('use effect');
+      deleteGuest().catch((err) => console.log(err));
+      setDel(false);
+      setIsLoading(true);
+    }
+  }, [deleteGuest, del, setDel, id, setIsLoading]);
+
   return (
     <li>
       <div data-test-id="guest" css={listOfGuestsSingleGuest}>
         <div css={listOfGuestsSingleGuestNames}>
-          <div css={listOfGuestsSingleGuestName}>{props.firstName}</div>
-          <div css={listOfGuestsSingleGuestName}>{props.lastName}</div>
+          <div css={listOfGuestsSingleGuestName}>{firstName}</div>
+          <div css={listOfGuestsSingleGuestName}>{lastName}</div>
         </div>
         <label>
           attending
           <input
             aria-label={checkBoxAria}
             type="checkbox"
-            checked={attend}
-            onChange={changeAttending}
+            checked={attending}
+            onChange={() => setChange(true)}
           />
         </label>
-        <button onClick={deleteGuest}>Remove</button>
+        <button onClick={() => setDel(true)}>Remove</button>
       </div>
     </li>
   );
@@ -80,17 +124,9 @@ function Guest(props) {
 export default Guest;
 
 Guest.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
   attending: PropTypes.bool.isRequired,
-  guestsList: PropTypes.arrayOf(
-    PropTypes.shape({
-      firstName: PropTypes.string.isRequired,
-      lastName: PropTypes.string.isRequired,
-      attending: PropTypes.bool.isRequired,
-      id: PropTypes.number.isRequired,
-    }),
-  ),
-  setGuestsList: PropTypes.func,
+  baseUrl: PropTypes.string,
 };

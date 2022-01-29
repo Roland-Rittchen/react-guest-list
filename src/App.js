@@ -4,6 +4,8 @@ import { useState } from 'react';
 import AddGuest from './AddGuest.js';
 import GuestList from './GuestList.js';
 
+const baseUrl = 'http://localhost:4000';
+
 const header = css`
   background-color: rgba(40, 41, 54, 1);
   width: 50%;
@@ -34,51 +36,30 @@ const inputSection = css`
 `;
 
 function App() {
-  const [isLoading, setIsloading] = useState(true);
-  const [guestsList, setGuestsList] = useState([
-    {
-      firstName: 'Aaron',
-      lastName: 'Aaronson',
-      attending: false,
-      id: 0,
-    },
-    {
-      firstName: 'Boris',
-      lastName: 'Borisov',
-      attending: true,
-      id: 1,
-    },
-    {
-      firstName: 'Caesar',
-      lastName: 'Calvin',
-      attending: false,
-      id: 2,
-    },
-    {
-      firstName: 'Doris',
-      lastName: 'Deringer',
-      attending: true,
-      id: 3,
-    },
-  ]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [guestsList, setGuestsList] = useState([]);
 
   return (
     <div className="App">
       <header className="App-header" css={header}>
-        <h1>Basic White Bitch Guest List</h1>
+        <h1>React Guest List</h1>
       </header>
       <div css={appOutline}>
         <GuestList
           css={listOfGuests}
           guestsList={guestsList}
           setGuestsList={setGuestsList}
-          setIsLoading={setIsloading}
+          setIsLoading={setIsLoading}
+          isLoading={isLoading}
+          baseUrl={baseUrl}
         />
         <div css={inputSection}>
           <AddGuest
             guestsList={guestsList}
             setGuestsList={setGuestsList}
             isLoading={isLoading}
+            setIsLoading={setIsLoading}
+            baseUrl={baseUrl}
           />
         </div>
       </div>

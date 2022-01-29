@@ -130,3 +130,30 @@ function App() {
 }
 
 export default App;
+
+/*
+    {
+      firstName: 'Aaron',
+      lastName: 'Aaronson',
+      attending: false,
+      id: 0,
+    },
+    {
+      firstName: 'Boris',
+      lastName: 'Borisov',
+      attending: true,
+      id: 1,
+    },
+    {
+      firstName: 'Caesar',
+      lastName: 'Calvin',
+      attending: false,
+      id: 2,
+    },
+    {
+      firstName: 'Doris',
+      lastName: 'Deringer',
+      attending: true,
+      id: 3,
+    },
+    */
