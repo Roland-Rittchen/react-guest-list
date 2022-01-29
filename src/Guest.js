@@ -53,7 +53,7 @@ function Guest({ id, firstName, lastName, attending, baseUrl, setIsLoading }) {
       );
       setTimeout(() => {
         setIsLoading(true);
-      }, 250);
+      }, 75);
     }
   }, [
     changeAttending,
