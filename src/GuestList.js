@@ -17,12 +17,6 @@ function GuestList({
   isLoading,
   baseUrl,
 }) {
-  // temporary graveyard for yet unused props
-  function temp() {
-    console.log(baseUrl);
-    setIsLoading(true);
-  }
-
   // Getting all guests (aka GET /guests)
   const fetchGuests = useCallback(async () => {
     if (isLoading) {
@@ -50,11 +44,7 @@ function GuestList({
 */
 
   if (isLoading) {
-    return (
-      <h1 css={loadingStyle}>
-        Loading...<button onClick={temp}>test</button>
-      </h1>
-    );
+    return <h1 css={loadingStyle}>Loading...</h1>;
   } else {
     guestsList.forEach(() => {});
   }
