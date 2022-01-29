@@ -35,19 +35,18 @@ function Guest({ id, firstName, lastName, attending, baseUrl, setIsLoading }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ attending: true }),
+        body: JSON.stringify({ attending: !attending }),
       });
       // const updatedGuest = await response.json();
     }
     // const updatedGuest = await response.json();
-  }, [baseUrl, change, id]);
+  }, [baseUrl, change, id, attending]);
 
   useEffect(() => {
     if (change) {
       console.log('use effect');
       changeAttending().catch((err) => console.log(err));
       setChange(false);
-      setIsLoading(true);
       setCheckBoxAria(
         firstName.toLowerCase() +
           ' ' +
@@ -55,6 +54,9 @@ function Guest({ id, firstName, lastName, attending, baseUrl, setIsLoading }) {
           ' ' +
           attending,
       );
+      setTimeout(() => {
+        setIsLoading(true);
+      }, 500);
     }
   }, [
     changeAttending,
@@ -84,7 +86,6 @@ function Guest({ id, firstName, lastName, attending, baseUrl, setIsLoading }) {
     if (!del) {
       return;
     }
-    console.log('use callback');
     await fetch(`${baseUrl}/guests/` + id, {
       method: 'DELETE',
     });
@@ -92,10 +93,11 @@ function Guest({ id, firstName, lastName, attending, baseUrl, setIsLoading }) {
 
   useEffect(() => {
     if (del) {
-      console.log('use effect');
       deleteGuest().catch((err) => console.log(err));
       setDel(false);
-      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(true);
+      }, 500);
     }
   }, [deleteGuest, del, setDel, id, setIsLoading]);
 

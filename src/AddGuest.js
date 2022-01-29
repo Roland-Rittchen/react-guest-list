@@ -35,10 +35,12 @@ function AddGuest({
       // await createGuest();
       createGuest().catch((err) => console.log(err));
       setCreate(false);
-      setIsLoading(true);
+
       setFirstName('');
       setLastName('');
-      console.log('local Guest List' + guestsList);
+      setTimeout(() => {
+        setIsLoading(true);
+      }, 500);
     }
   }, [
     createGuest,

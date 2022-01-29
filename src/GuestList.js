@@ -20,17 +20,18 @@ function GuestList({
   // Getting all guests (aka GET /guests)
   const fetchGuests = useCallback(async () => {
     if (isLoading) {
+      // setTimeout(() => {}, 500);
       const response = await fetch(`${baseUrl}/guests`);
       const allGuests = await response.json();
       setGuestsList(allGuests);
+      setIsLoading(false);
     }
-  }, [baseUrl, setGuestsList, isLoading]);
+  }, [baseUrl, setGuestsList, setIsLoading, isLoading]);
 
   useEffect(() => {
     if (isLoading) {
-      fetchGuests()
-        .then(() => setIsLoading(false))
-        .catch((err) => console.log(err));
+      fetchGuests().catch((err) => console.log(err));
+      // .then(() => setIsLoading(false))
     }
   }, [fetchGuests, setIsLoading, isLoading]);
 
