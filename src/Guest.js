@@ -56,7 +56,7 @@ function Guest({ id, firstName, lastName, attending, baseUrl, setIsLoading }) {
       );
       setTimeout(() => {
         setIsLoading(true);
-      }, 500);
+      }, 250);
     }
   }, [
     changeAttending,
@@ -69,17 +69,6 @@ function Guest({ id, firstName, lastName, attending, baseUrl, setIsLoading }) {
     firstName,
     lastName,
   ]);
-
-  // function changeAttending() {
-  //   const tempGuestList = [...guestsList];
-  //   tempGuestList[id].attending = !attend;
-  //   setGuestsList(tempGuestList);
-  //   setAttend(!attend);
-  //   setCheckBoxAria(
-  //     firstName.toLowerCase() + ' ' + lastName.toLowerCase() + ' ' + attend,
-  //   );
-  //   // console.log(props.guestsList);
-  // }
 
   // Deleting a guest (aka DELETE /guests/:id)
   const deleteGuest = useCallback(async () => {
@@ -97,7 +86,7 @@ function Guest({ id, firstName, lastName, attending, baseUrl, setIsLoading }) {
       setDel(false);
       setTimeout(() => {
         setIsLoading(true);
-      }, 500);
+      }, 250);
     }
   }, [deleteGuest, del, setDel, id, setIsLoading]);
 

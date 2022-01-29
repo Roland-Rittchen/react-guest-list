@@ -20,7 +20,6 @@ function GuestList({
   // Getting all guests (aka GET /guests)
   const fetchGuests = useCallback(async () => {
     if (isLoading) {
-      // setTimeout(() => {}, 500);
       const response = await fetch(`${baseUrl}/guests`);
       const allGuests = await response.json();
       setGuestsList(allGuests);
@@ -31,21 +30,8 @@ function GuestList({
   useEffect(() => {
     if (isLoading) {
       fetchGuests().catch((err) => console.log(err));
-      // .then(() => setIsLoading(false))
     }
   }, [fetchGuests, setIsLoading, isLoading]);
-
-  /*
-  // Updating a guest (aka PUT /guests/:id)
-  const response = await fetch(`${baseUrl}/guests/1`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ attending: true }),
-  });
-  const updatedGuest = await response.json();
-*/
 
   if (isLoading) {
     return <h1 css={loadingStyle}>Loading...</h1>;
