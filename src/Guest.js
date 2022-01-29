@@ -9,13 +9,6 @@ const listOfGuestsSingleGuest = css`
   justify-content: space-between;
 `;
 
-const listOfGuestsSingleGuestNames = css`
-  display: flex;
-  flex-direction: column;
-
-  justify-content: space-between;
-`;
-
 const listOfGuestsSingleGuestName = css`
   margin: 10px;
   font-weight: 700;
@@ -93,9 +86,8 @@ function Guest({ id, firstName, lastName, attending, baseUrl, setIsLoading }) {
   return (
     <li>
       <div data-test-id="guest" css={listOfGuestsSingleGuest}>
-        <div css={listOfGuestsSingleGuestNames}>
-          <div css={listOfGuestsSingleGuestName}>{firstName}</div>
-          <div css={listOfGuestsSingleGuestName}>{lastName}</div>
+        <div css={listOfGuestsSingleGuestName}>
+          {firstName} {lastName}
         </div>
         <label>
           attending
