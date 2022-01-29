@@ -18,7 +18,11 @@ function Guest({ id, firstName, lastName, attending, baseUrl, setIsLoading }) {
   const [del, setDel] = useState(false);
   const [change, setChange] = useState(false);
   const [checkBoxAria, setCheckBoxAria] = useState(
-    firstName.toLowerCase() + ' ' + lastName.toLowerCase() + ' ' + attending,
+    firstName.toLowerCase() +
+      ' ' +
+      lastName.toLowerCase() +
+      ' attending ' +
+      attending,
   ); // <first name> <last name> attending status
 
   const changeAttending = useCallback(async () => {
@@ -44,8 +48,8 @@ function Guest({ id, firstName, lastName, attending, baseUrl, setIsLoading }) {
         firstName.toLowerCase() +
           ' ' +
           lastName.toLowerCase() +
-          ' ' +
-          attending,
+          ' attending ' +
+          !attending,
       );
       setTimeout(() => {
         setIsLoading(true);
