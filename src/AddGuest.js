@@ -1,23 +1,12 @@
 import PropTypes from 'prop-types';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 
-function AddGuest({
-  guestsList,
-  setGuestsList,
-  isLoading,
-  setIsLoading,
-  baseUrl,
-}) {
+function AddGuest({ guestsList, setGuestsList, isLoading, baseUrl }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [create, setCreate] = useState(false);
+  // const [create, setCreate] = useState(false);
 
-  // Creating a new guest (aka POST /guests)
-  const createGuest = useCallback(async () => {
-    if (!create) {
-      return;
-    }
-    console.log('use callback');
+  async function create() {
     const response = await fetch(`${baseUrl}/guests`, {
       method: 'POST',
       headers: {
@@ -26,32 +15,12 @@ function AddGuest({
       body: JSON.stringify({ firstName: firstName, lastName: lastName }),
     });
     const createdGuest = await response.json();
+    setFirstName('');
+    setLastName('');
+    console.log(guestsList);
     console.log(createdGuest);
-  }, [baseUrl, firstName, lastName, create]);
-
-  useEffect(() => {
-    if (create) {
-      console.log('use effect');
-      // await createGuest();
-      createGuest().catch((err) => console.log(err));
-      setCreate(false);
-
-      setFirstName('');
-      setLastName('');
-      setTimeout(() => {
-        setIsLoading(true);
-      }, 75);
-    }
-  }, [
-    createGuest,
-    create,
-    setCreate,
-    firstName,
-    lastName,
-    guestsList,
-    setGuestsList,
-    setIsLoading,
-  ]);
+    setGuestsList([...guestsList, createdGuest]);
+  }
 
   const handleKeyDownFirstName = (event) => {
     if (event.key === 'Enter') {
@@ -61,7 +30,7 @@ function AddGuest({
   };
   const handleKeyDownLastName = (event) => {
     if (event.key === 'Enter') {
-      setCreate(true);
+      create().catch((err) => console.log(err));
     }
   };
 
@@ -86,13 +55,6 @@ function AddGuest({
           disabled={isLoading ? 'disabled' : ''}
         />
       </label>
-      {/*
-      <button
-        onClick={() => setCreate(true)}
-        disabled={isLoading ? 'disabled' : ''}
-      >
-        Add guest
-      </button> */}
     </div>
   );
 }
@@ -110,6 +72,5 @@ AddGuest.propTypes = {
   ),
   setGuestsList: PropTypes.func,
   isLoading: PropTypes.bool,
-  setIsLoading: PropTypes.func,
   baseUrl: PropTypes.string,
 };

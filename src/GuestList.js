@@ -23,7 +23,7 @@ function GuestList({
       const response = await fetch(`${baseUrl}/guests`);
       const allGuests = await response.json();
       setGuestsList(allGuests);
-      setIsLoading(false);
+      setIsLoading(false); // fix this line?
     }
   }, [baseUrl, setGuestsList, setIsLoading, isLoading]);
 
@@ -35,9 +35,8 @@ function GuestList({
 
   if (isLoading) {
     return <h1 css={loadingStyle}>Loading...</h1>;
-  } else {
-    guestsList.forEach(() => {});
   }
+
   return (
     <ul>
       {guestsList.map((singleGuest) => {
@@ -52,6 +51,8 @@ function GuestList({
             attending={singleGuest.attending}
             baseUrl={baseUrl}
             setIsLoading={setIsLoading}
+            guestsList={guestsList}
+            setGuestsList={setGuestsList}
           />
         );
       })}

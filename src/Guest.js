@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import PropTypes from 'prop-types';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const listOfGuestsSingleGuest = css`
   display: flex;
@@ -14,9 +14,15 @@ const listOfGuestsSingleGuestName = css`
   font-weight: 700;
 `;
 
-function Guest({ id, firstName, lastName, attending, baseUrl, setIsLoading }) {
-  const [del, setDel] = useState(false);
-  const [change, setChange] = useState(false);
+function Guest({
+  id,
+  firstName,
+  lastName,
+  attending,
+  baseUrl,
+  guestsList,
+  setGuestsList,
+}) {
   const [checkBoxAria, setCheckBoxAria] = useState(
     firstName.toLowerCase() +
       ' ' +
@@ -25,67 +31,41 @@ function Guest({ id, firstName, lastName, attending, baseUrl, setIsLoading }) {
       attending,
   ); // <first name> <last name> attending status
 
-  const changeAttending = useCallback(async () => {
-    if (change) {
-      await fetch(`${baseUrl}/guests/` + id, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ attending: !attending }),
-      });
-      // const updatedGuest = await response.json();
+  // Changing a guest (aka PUT /guests/:id)
+  async function changeAttendance() {
+    await fetch(`${baseUrl}/guests/` + id, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ attending: !attending }),
+    });
+    const tmpGuestsList = [...guestsList];
+    for (let i = 0; i < tmpGuestsList.length; i++) {
+      // change the local guestlist
+      if (tmpGuestsList[i]['id'] === id) {
+        tmpGuestsList[i]['attending'] = !attending;
+      }
     }
-    // const updatedGuest = await response.json();
-  }, [baseUrl, change, id, attending]);
-
-  useEffect(() => {
-    if (change) {
-      console.log('use effect');
-      changeAttending().catch((err) => console.log(err));
-      setChange(false);
-      setCheckBoxAria(
-        firstName.toLowerCase() +
-          ' ' +
-          lastName.toLowerCase() +
-          ' attending ' +
-          !attending,
-      );
-      setTimeout(() => {
-        setIsLoading(true);
-      }, 75);
-    }
-  }, [
-    changeAttending,
-    attending,
-    setCheckBoxAria,
-    change,
-    setChange,
-    id,
-    setIsLoading,
-    firstName,
-    lastName,
-  ]);
+    setCheckBoxAria(
+      // change the aria label of the checkbox
+      firstName.toLowerCase() +
+        ' ' +
+        lastName.toLowerCase() +
+        ' attending ' +
+        !attending,
+    );
+    setGuestsList(tmpGuestsList);
+  }
 
   // Deleting a guest (aka DELETE /guests/:id)
-  const deleteGuest = useCallback(async () => {
-    if (!del) {
-      return;
-    }
+  async function deleteGuest() {
     await fetch(`${baseUrl}/guests/` + id, {
       method: 'DELETE',
     });
-  }, [baseUrl, id, del]);
-
-  useEffect(() => {
-    if (del) {
-      deleteGuest().catch((err) => console.log(err));
-      setDel(false);
-      setTimeout(() => {
-        setIsLoading(true);
-      }, 75);
-    }
-  }, [deleteGuest, del, setDel, id, setIsLoading]);
+    const tmpGuestsList = guestsList.filter((guest) => guest.id !== id);
+    setGuestsList(tmpGuestsList);
+  }
 
   return (
     <li>
@@ -99,10 +79,10 @@ function Guest({ id, firstName, lastName, attending, baseUrl, setIsLoading }) {
             aria-label={checkBoxAria}
             type="checkbox"
             checked={attending}
-            onChange={() => setChange(true)}
+            onChange={changeAttendance}
           />
         </label>
-        <button onClick={() => setDel(true)}>Remove</button>
+        <button onClick={deleteGuest}>Remove</button>
       </div>
     </li>
   );
@@ -116,4 +96,13 @@ Guest.propTypes = {
   lastName: PropTypes.string.isRequired,
   attending: PropTypes.bool.isRequired,
   baseUrl: PropTypes.string,
+  guestsList: PropTypes.arrayOf(
+    PropTypes.shape({
+      firstName: PropTypes.string.isRequired,
+      lastName: PropTypes.string.isRequired,
+      attending: PropTypes.bool.isRequired,
+      id: PropTypes.string.isRequired,
+    }),
+  ),
+  setGuestsList: PropTypes.func,
 };
